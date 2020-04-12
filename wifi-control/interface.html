@@ -1,7 +1,9 @@
 <html>
-<head><title>Relay control</title></head>
-<body>
+<head>
+<title>Relay control</title>
 <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+</head>
+<body>
 <script>
 
 var baseurl = 'http://192.168.0.77/';
@@ -13,6 +15,7 @@ function call(action) {
 </script>
 
 <h3>Relay</h3>
+
 <button onclick="call('on')">On</button>
 <button onclick="call('off')">Off</button>
 <button onclick="call('pulse')">Pulse</button>
