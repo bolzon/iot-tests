@@ -13,8 +13,11 @@
 #define D7 13
 #define D8 15
 
-const int relay_pin = D0;
+IPAddress localip(192, 168, 0, 77);
+IPAddress gateway(192, 168, 0, 1);
+IPAddress subnet(255, 255, 255, 0);
 
+const int relay_pin = D0;
 const char* ssid = "ssid";
 const char* pwd = "pwd";
 
@@ -26,56 +29,52 @@ void ok() {
 }
 
 void not_found() {
+  Serial.println("Not found");
   server.send(404, "text/html", "Not found");
 }
 
-void activate_relay() {
-  Serial.println("GET /relay");
+void pulse() {
+  Serial.println("GET /pulse");
   digitalWrite(relay_pin, LOW);
   delay(1000);
   digitalWrite(relay_pin, HIGH);
-  server.send(200, "text/html", "Relay activated");
+  server.send(200, "text/html", "Pulsed");
 }
 
-void setup() {
-  pinMode(relay_pin, OUTPUT);
-  digitalWrite(relay_pin, HIGH);
-
-  Serial.begin(115200);
-  Serial.println();
-  Serial.println("Initializing config/wifi...");
+void init_wifi() {
+  Serial.print("Connecting to wifi: ");
+  Serial.println(ssid);
 
   WiFi.mode(WIFI_STA);
-/*
-  if (!WiFi.softAP(ssid, pwd)) {
-    Serial.println("Could not connect to wifi");
-  }
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-*/
+  WiFi.hostname("esp8266");
+  WiFi.config(localip, gateway, subnet);
   WiFi.begin(ssid, pwd);
+
   if (WiFi.waitForConnectResult() != WL_CONNECTED) {
     Serial.println("Wifi connection failed! Rebooting...");
-    delay(1000);
+    delay(5000);
     ESP.restart();
   }
-/*
-  if (!WiFi.softAPConfig(localip, gateway, subnet)) {
-    Serial.println("Could not set wifi config");
-  }
-*/
+
+  Serial.print("Wifi connected! Local IP: ");
+  Serial.println(WiFi.localIP());
+
+  Serial.print("Gateway: ");
+  Serial.println(WiFi.gatewayIP());
+}
+
+void init_server() {
   server.on("/", ok);
-  server.on("/relay", activate_relay);
+  server.on("/pulse", pulse);
 
   server.on("/on", []() {
+    Serial.println("GET /on");
     digitalWrite(relay_pin, HIGH);
     server.send(200, "text/html", "On");
   });
 
   server.on("/off", []() {
+    Serial.println("GET /off");
     digitalWrite(relay_pin, LOW);
     server.send(200, "text/html", "Off");
   });
@@ -84,7 +83,18 @@ void setup() {
   server.begin();
 
   Serial.println("Server listening");
-  Serial.println(WiFi.localIP());
+}
+
+void setup() {
+  pinMode(relay_pin, OUTPUT);
+  digitalWrite(relay_pin, HIGH);
+
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println("Initializing");
+
+  init_wifi();
+  init_server();
 }
 
 void loop() {
