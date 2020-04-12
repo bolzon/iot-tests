@@ -17,15 +17,35 @@ IPAddress localip(192, 168, 0, 77);
 IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
 
-const int relay_pin = D0;
-const char* ssid = "ssid";
-const char* pwd = "pwd";
+const int relay_pin = D1;
+const char* ssid = "";
+const char* pwd = "";
 
 ESP8266WebServer server(80);
 
 void ok() {
+  static char* html = "" \
+    "<html lang=\"en-US\">" \
+    "<head>" \
+    "<title>Relay control</title>" \
+    "<script src=\"https://code.jquery.com/jquery-3.5.0.min.js\"></script>" \
+    "</head>" \
+    "<body>" \
+    "<script>" \
+    "var baseurl = 'http://192.168.0.77/';" \
+    "function call(action) {" \
+    "  $.get(baseurl + action, function() {});" \
+    "}" \
+    "</script>" \
+    "<h3>Relay</h3>" \
+    "<button onclick=\"call('on')\">On</button> " \
+    "<button onclick=\"call('off')\">Off</button> " \
+    "<button onclick=\"call('pulse')\">Pulse</button>" \
+    "</body>" \
+    "</html>";
+
   Serial.println("GET /ok");
-  server.send(200, "text/html", "Ok");
+  server.send(200, "text/html", html);
 }
 
 void not_found() {
