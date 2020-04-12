@@ -1,0 +1,22 @@
+<html>
+<head><title>Relay control</title></head>
+<body>
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+<script>
+
+var baseurl = 'http://192.168.0.133/';
+
+function on() {
+	$.get(baseurl + 'off', function() {});
+}
+
+function off() {
+	$.get(baseurl + 'on', function() {});
+}
+
+</script>
+<h3>Relay</h3>
+<button onclick="on()">On</button>
+<button onclick="off()">Off</button>
+</body>
+</html>
