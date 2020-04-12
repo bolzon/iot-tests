@@ -1,3 +1,9 @@
+/*
+ * Wifi cotrol using ESP8266 (ESP12)
+ * Alexandre Bolzon <blzn@mail.ru>
+ * April 2020
+ */
+
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
@@ -27,7 +33,7 @@ void ok() {
   static char* html = "" \
     "<html lang=\"en-US\">" \
     "<head>" \
-    "<title>Relay control</title>" \
+    "<title>Pin control (D1)</title>" \
     "<script src=\"https://code.jquery.com/jquery-3.5.0.min.js\"></script>" \
     "</head>" \
     "<body>" \
@@ -37,7 +43,7 @@ void ok() {
     "  $.get(baseurl + action, function() {});" \
     "}" \
     "</script>" \
-    "<h3>Relay</h3>" \
+    "<h3>Pin control (D1)</h3>" \
     "<button onclick=\"call('on')\">On</button> " \
     "<button onclick=\"call('off')\">Off</button> " \
     "<button onclick=\"call('pulse')\">Pulse</button>" \
