@@ -8,7 +8,7 @@ To test this sample I've configured the [Mosquitto](https://mosquitto.org/) brok
 
 ```bash
 $ docker pull eclipse-mosquitto
-$ docker run -it --name mosquitto -p 1883:1883 eclipse-mosquitto
+$ docker run -it --rm --name mosquitto -p 1883:1883 eclipse-mosquitto
 ```
 
 You can test your container by subscribing to a topic and publishing something to it:
