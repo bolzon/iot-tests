@@ -21,17 +21,18 @@
 
 // mqtt params
 
-#define MQTT_ID "bolzon"
-#define MQTT_SUB "bolzon"
-#define MQTT_PUB "bolzon"
+#define MQTT_ID "esp8266"
+#define MQTT_PUB "bolzon_pub"
+#define MQTT_SUB "bolzon_sub"
 
-const char* MQTT_BROKER_URL = "mqtt-broker";
+const char* MQTT_BROKER_URL = "192.168.0.177";
 const int MQTT_BROKER_PORT = 1883;
 
 WiFiClient wifi_client;
-PubSubClient mqtt_client(wifi_client);
+void mqtt_callback(const char*, byte*, unsigned int);
+PubSubClient mqtt_client(MQTT_BROKER_URL, MQTT_BROKER_PORT, mqtt_callback, wifi_client);
 
-byte mqtt_data = 0;
+byte mqtt_data = 0; // 0 or 1 (off/on)
 
 // wifi params
 
@@ -75,8 +76,11 @@ void init_mqtt() {
 
     if (mqtt_client.connect(MQTT_ID)) {
       Serial.println("Connected to MQTT broker!");
-      if (!mqtt_client.subscribe(MQTT_SUB)) {
-        Serial.println("Could not subscribe to topic");
+      if (mqtt_client.subscribe(MQTT_SUB)) {
+        Serial.printf("Successfully subscribed to \"%s\"\n", MQTT_SUB);
+      }
+      else {
+        Serial.printf("Could not subscribe to \"%s\"\n", MQTT_SUB);
       }
     }
     else {
@@ -88,31 +92,32 @@ void init_mqtt() {
 }
 
 void mqtt_callback(const char* topic, byte* payload, unsigned int length) {
-  Serial.println("MQTT callback");
-  String msg = "";
-  for (int i = 0; i < length; i++) {
-    msg += (char)payload[i];
+  Serial.printf("%s MQTT callback\n", MQTT_SUB);
+  if (length == 0) {
+    return;
   }
-  Serial.printf("Payload: \"%s\"\n", msg.c_str());
-  if (msg.equals("1")) {
-    mqtt_data = 1;
+  const byte data = (byte)(payload[0] - '0');
+  Serial.printf("Payload: \"%d\"\n", data);
+  if (data == 1 || data == 0) {
+    mqtt_data = data;
   }
-  else if (msg.equals("0")) {
-    mqtt_data = 0;
-  }
-  Serial.printf("MQTT data = %d\n", (int)mqtt_data);
+  Serial.printf("MQTT data: \"%d\"\n", (int)mqtt_data);
+  update_io();
+  mqtt_pub();
+}
+
+void update_io() {
+  // here you can update your IO
+  // according to MQTT data received/set
+  // e.g.
+
+  //digitalWrite(D0, mqtt_data ? HIGH : LOW);
 }
 
 void mqtt_pub() {
   const char* msg = mqtt_data ? "1" : "0";
   Serial.printf("Publishing MQTT data: %s\n", msg);
   mqtt_client.publish(MQTT_PUB, msg);
-
-  delay(5000);
-  
-  if (!mqtt_client.loop()) {
-    init_mqtt();
-  }
 }
 
 void setup() {
@@ -121,13 +126,13 @@ void setup() {
   Serial.println("Initializing");
 
   init_wifi();
-
-  mqtt_client.setServer(MQTT_BROKER_URL, MQTT_BROKER_PORT);
-  mqtt_client.setCallback(mqtt_callback);
-
   init_mqtt();
+  mqtt_pub();
 }
 
 void loop() {
-  mqtt_pub();
+  delay(500);
+  if (!mqtt_client.loop()) {
+    init_mqtt();
+  }
 }
