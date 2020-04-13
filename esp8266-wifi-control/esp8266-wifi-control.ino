@@ -1,5 +1,5 @@
 /*
- * Wifi cotrol using ESP8266 (ESP12)
+ * Wifi control using ESP8266 (ESP12)
  * Alexandre Bolzon <blzn@mail.ru>
  * April 2020
  */
