@@ -16,7 +16,7 @@ You can test your container by subscribing to a topic and publishing something t
 1. Have installed a mosquitto client in your machine.
 
    ```bash
-   sudo apt install mosquitto-clients
+   $ sudo apt install mosquitto-clients
    ```
 
 2. Subscribe to a topic in a terminal.
