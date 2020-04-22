@@ -19,7 +19,7 @@ private:
   String m_ssid;
   String m_pwd;
 
-  IPAddress* m_gIp;
+  IPAddress* m_pIp;
   IPAddress* m_pGateway;
   IPAddress* m_pSubnet;
 };

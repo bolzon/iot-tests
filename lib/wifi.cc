@@ -22,9 +22,9 @@ bool Wifi::connect() {
   }
   WiFi.mode(WIFI_STA);
   if (m_pIp != 0) {
-    WiFi.config(localip, gateway, subnet);
+    WiFi.config(m_pIp, m_pGateway, m_pSubnet);
   }
-  WiFi.begin(ssid, pwd);
+  WiFi.begin(m_ssid, m_pwd);
   if (WiFi.waitForConnectResult() != WL_CONNECTED) {
     return false;
   }
