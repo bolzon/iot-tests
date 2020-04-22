@@ -8,7 +8,7 @@ Wifi::Wifi(const char* ssid, const char* pwd) {
   m_pSubnet = 0;
 }
 
-Wifi(const char* ssid, const char* pwd, IPAddress* ip, IPAddress* gateway, IPAddress* subnet) : Wifi(ssid, pwd) {
+Wifi::Wifi(const char* ssid, const char* pwd, IPAddress* ip, IPAddress* gateway, IPAddress* subnet) : Wifi(ssid, pwd) {
   m_pIp = ip;
   m_pGateway = gateway;
   m_pSubnet = subnet;
