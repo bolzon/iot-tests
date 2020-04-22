@@ -16,7 +16,7 @@ Wifi(const char* ssid, const char* pwd, IPAddress* ip, IPAddress* gateway, IPAdd
 
 Wifi::~Wifi() {}
 
-bool Wifi::init() {
+bool Wifi::connect() {
   if (this->isConnected()) {
     return true;
   }
