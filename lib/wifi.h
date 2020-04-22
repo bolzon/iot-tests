@@ -12,6 +12,7 @@ public:
 
   bool connect();
   bool isConnected();
+  bool reconnect();
 
 private:
 

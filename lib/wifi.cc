@@ -34,3 +34,10 @@ bool Wifi::connect() {
 bool Wifi::isConnected() {
   return WiFi.status() == WL_CONNECTED;
 }
+
+bool Wifi::reconnect() {
+  if (!this->isConnected()) {
+    return this->connect();
+  }
+  return true;
+}
