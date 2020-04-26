@@ -4,7 +4,7 @@
  * April 2020
  */
 
-// comment this line to disable serial prints
+// comment line below to disable serial prints
 
 #define USE_SERIAL
 
