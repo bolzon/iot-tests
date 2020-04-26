@@ -4,11 +4,16 @@
  * April 2020
  */
 
-#define USE_SERIAL TRUE
+// comment this line to disable serial prints
+
+#define USE_SERIAL
+
+// setup function
+// runs at chip startup
 
 void setup() {
 
-#if USE_SERIAL
+#ifdef USE_SERIAL
   Serial.begin(115200);
   Serial.println("Initializing");
 #endif
@@ -16,18 +21,21 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
+// loop function
+// runs continuously while chip is on
+
 void loop() {
 
   digitalWrite(LED_BUILTIN, LOW); // low = on
 
-#if USE_SERIAL
+#ifdef USE_SERIAL
   Serial.println("Turned built-in LED on")
 #endif
 
   delay(1500);
   digitalWrite(LED_BUILTIN, HIGH); // high = off
 
-#if USE_SERIAL
+#ifdef USE_SERIAL
   Serial.println("Turned built-in LED off")
 #endif
 
