@@ -111,7 +111,11 @@ void update_io() {
   // according to MQTT data received/set
   // e.g.
 
-  //digitalWrite(D0, mqtt_data ? HIGH : LOW);
+  const int pin = D0;
+  const int signal = mqtt_data ? HIGH : LOW;
+
+  Serial.printf("digitalWrite(%d, %s)\n", pin, signal ? "HIGH" : "LOW");
+  digitalWrite(pin, signal);
 }
 
 void mqtt_pub() {
@@ -127,11 +131,13 @@ void setup() {
 
   init_wifi();
   init_mqtt();
+
+  update_io();
   mqtt_pub();
 }
 
 void loop() {
-  delay(500);
+  delay(1000);
   if (!mqtt_client.loop()) {
     init_mqtt();
   }
