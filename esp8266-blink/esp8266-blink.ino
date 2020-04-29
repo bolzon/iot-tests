@@ -29,15 +29,15 @@ void loop() {
   digitalWrite(LED_BUILTIN, LOW); // low = on
 
 #ifdef USE_SERIAL
-  Serial.println("Turned built-in LED on")
+  Serial.println("Turned built-in LED on");
 #endif
 
-  delay(1500);
+  delay(1000);
   digitalWrite(LED_BUILTIN, HIGH); // high = off
 
 #ifdef USE_SERIAL
-  Serial.println("Turned built-in LED off")
+  Serial.println("Turned built-in LED off");
 #endif
 
-  delay(3000);
+  delay(1000);
 }
