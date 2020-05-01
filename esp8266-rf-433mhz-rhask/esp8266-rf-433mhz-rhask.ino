@@ -29,6 +29,9 @@ const uint8_t interval = 1000;
 void setup_rhask() {
   if (!driver.init()) {
     Serial.println("Driver init failed");
+    while (true) {
+      delay(1000);
+    }
   }
 }
 
