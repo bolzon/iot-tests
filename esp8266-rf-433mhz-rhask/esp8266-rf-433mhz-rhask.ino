@@ -1,5 +1,5 @@
+#include <SPI.h>
 #include <RH_ASK.h>
-#include <SPI.h> // Not actually used but needed to compile
 
 // nodemcu pins
 
@@ -13,8 +13,13 @@
 #define D7 13
 #define D8 15
 
-#define TX_PIN 11
-#define RX_PIN 10
+#ifdef ESP8266
+ #define TX_PIN D4
+ #define RX_PIN D2
+#else
+ #define TX_PIN 11
+ #define RX_PIN 10
+#endif
 
 RH_ASK driver(2000, RX_PIN, TX_PIN, 0); // speed (default 2000), rx pin, tx pin, ptt pin, ptt inverted
 
@@ -28,7 +33,7 @@ void setup_rhask() {
 
 uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
 uint8_t buflen = 0;
-  
+
 void loop_rhask() {
   buflen = sizeof(uint8_t) * RH_ASK_MAX_MESSAGE_LEN;
   if (driver.recv(buf, &buflen)) {
@@ -40,10 +45,11 @@ void loop_rhask() {
   }
   if (++count > 30000) {
     const char* msg = "ABC";
-    driver.send((uint8_t*)msg, strlen(msg));
+    driver.send((uint8_t*) msg, strlen(msg));
     driver.waitPacketSent();
     Serial.println("Sent");
- }
+    delay(200);
+  }
 }
 
 void setup() {
