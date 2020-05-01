@@ -1,4 +1,3 @@
-#include <SPI.h>
 #include <RH_ASK.h>
 
 // nodemcu pins
@@ -23,8 +22,8 @@
 
 RH_ASK driver(2000, RX_PIN, TX_PIN, 0); // speed (default 2000), rx pin, tx pin, ptt pin, ptt inverted
 
-uint8_t last_sent = 0;
-const uint8_t interval = 1000;
+unsigned long last_sent = 0;
+const unsigned long interval = 1000;
 
 void setup_rhask() {
   if (!driver.init()) {
@@ -47,7 +46,7 @@ void loop_rhask() {
     Serial.print(buflen);
     Serial.println(")");
   }
-  uint8_t now = millis();
+  unsigned long now = millis();
   if (now - last_sent >= interval) {
     const char* msg = "bolzon";
     driver.send((uint8_t*) msg, strlen(msg));
@@ -60,8 +59,15 @@ void loop_rhask() {
 void setup() {
   Serial.begin(115200);
   Serial.print("Initializing... ");
+#ifdef ESP8266
+  Serial.print("ESP8266... ");
+#endif
   setup_rhask();
   Serial.println("OK");
+  Serial.print("- TX PIN: ");
+  Serial.println(TX_PIN);
+  Serial.print("- RX PIN: ");
+  Serial.println(RX_PIN);
 }
 
 void loop() {
