@@ -2,9 +2,9 @@
 
 Sample of radio frequency module integration with Arduino/ESP8266.
 
-I'm using super heterodine modules in my tests (not concluded yet).
+I'm using superheterodyne modules in my tests (not concluded yet).
 
-![Super Heterodine Modules](./rf-modules.jpeg)
+![Superheterodyne Modules](./rf-modules.jpeg)
 
 ## Subfolders
 
