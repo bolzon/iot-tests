@@ -23,7 +23,8 @@
 
 RH_ASK driver(2000, RX_PIN, TX_PIN, 0); // speed (default 2000), rx pin, tx pin, ptt pin, ptt inverted
 
-int count = 0;
+uint8_t last_sent = 0;
+const uint8_t interval = 1000;
 
 void setup_rhask() {
   if (!driver.init()) {
@@ -43,12 +44,13 @@ void loop_rhask() {
     Serial.print(buflen);
     Serial.println(")");
   }
-  if (++count > 30000) {
-    const char* msg = "ABC";
+  uint8_t now = millis();
+  if (now - last_sent >= interval) {
+    const char* msg = "bolzon";
     driver.send((uint8_t*) msg, strlen(msg));
     driver.waitPacketSent();
     Serial.println("Sent");
-    delay(200);
+    last_sent = now;
   }
 }
 
