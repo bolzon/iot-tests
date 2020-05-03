@@ -4,5 +4,5 @@ ISR are interrupt service routines, a special kind of functions with some unique
 
 In Arduino UNO there are 2 interrupts:
 
-- interrupt 0 on pin #2
-- interrupt 1 on pin #3
+- `INT:0` on pin **#2**
+- `INT:1` on pin **#3**
