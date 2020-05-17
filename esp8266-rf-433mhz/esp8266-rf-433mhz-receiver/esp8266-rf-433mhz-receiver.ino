@@ -1,5 +1,7 @@
 #include <RCSwitch.h>
 
+#include <RCSwitch.h>
+
 // nodemcu pins
 
 #define D0 16
@@ -12,17 +14,20 @@
 #define D7 13
 #define D8 15
 
-#define RX_PIN D1
+#define RX_PIN 0
 
 RCSwitch rc = RCSwitch();
 
-void setup_rcswitch() {
-  rc.disableTransmit();
+void setup() {
+  Serial.begin(115200);
+  Serial.print("Initializing... ");
   rc.enableReceive(RX_PIN);
+  Serial.println("OK");
 }
 
-void loop_rcswitch() {
+void loop() {
   if (rc.available()) {
+    Serial.println("Signal received");
     Serial.print(rc.getReceivedValue());
     Serial.print(" / ");
     Serial.print(rc.getReceivedBitlength());
@@ -31,15 +36,4 @@ void loop_rcswitch() {
     Serial.println(rc.getReceivedProtocol());
     rc.resetAvailable();
   }
-}
-
-void setup() {
-  Serial.begin(115200);
-  Serial.print("Initializing... ");
-  setup_rcswitch();
-  Serial.println("OK");
-}
-
-void loop() {
-  loop_rcswitch();
 }
